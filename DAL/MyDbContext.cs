@@ -15,7 +15,7 @@ namespace GIP2.DAL
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
