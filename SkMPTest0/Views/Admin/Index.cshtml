@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "Control Panel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="padding: 5px; padding-left: 15px;">
+        <li class="breadcrumb-item active" aria-current="page">Control Panel</li>
+    </ol>
+</nav>
+
+@if (User.IsInRole("Administrator"))
+{
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Users</h5>
+                <div class="card-body">
+                    <p class="card-text">Users management</p>
+                    <a asp-area="" asp-controller="Users" asp-action="Users" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Groups</h5>
+                <div class="card-body">
+                    <p class="card-text">Group list.</p>
+                    <a asp-area="" asp-controller="Groups" asp-action="Groups" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+{
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Lecture requests</h5>
+                <div class="card-body">
+                    <p class="card-text">Requests to attend a lecture.</p>
+                    <a asp-area="" asp-controller="LecturesPool" asp-action="LecturesPool" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Lectures</h5>
+                <div class="card-body">
+                    <p class="card-text">Lecture list.</p>
+                    <a asp-area="" asp-controller="Lectures" asp-action="Lectures" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Classes</h5>
+                <div class="card-body">
+                    <p class="card-text">Manage class information.</p>
+                    <a asp-area="" asp-controller="ClassRooms" asp-action="ClassRooms" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <h5 class="card-header">Subjects</h5>
+                <div class="card-body">
+                    <p class="card-text">Subjects list.</p>
+                    <a asp-area="" asp-controller="Subjects" asp-action="Subjects" class="btn btn-primary">Go</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

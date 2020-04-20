@@ -1,0 +1,62 @@
+﻿<nav aria-label="Table navigation">
+    <ul class="pagination paginationTable float-right">
+        @{
+            int minPage = (int)ViewData["Page"] - 2;
+            int maxPage = (int)ViewData["Page"] + 2;
+
+            if (minPage < 1)
+            {
+                minPage = 1;
+            }
+            if (maxPage > (int)ViewData["AllowPage"])
+            {
+                maxPage = (int)ViewData["AllowPage"];
+            }
+        }
+        @if ((int)ViewData["Page"] > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?offset=@((int)ViewData["Page"]-1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        @for (int i = minPage; i <= maxPage; i++)
+        {
+            if ((int)ViewData["Page"] == i)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?offset=@i">@i<span class="sr-only">(current)</span></a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="?offset=@i">@i</a></li>
+            }
+        }
+        @if ((int)ViewData["AllowPage"] <= (int)ViewData["Page"])
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" href="?offset=@((int)ViewData["Page"]+1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

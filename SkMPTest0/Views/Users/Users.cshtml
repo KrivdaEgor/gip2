@@ -1,0 +1,257 @@
+﻿@using Domain.Entities;
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityUser>;
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="_TableTop" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#addModal #id').val('').attr('readonly', true);
+        $('#addModalConfirm').click(function (e) {
+            e.preventDefault();
+            var id = $('#editModal #id').val();
+            var idGroup = $('#editModal #idGroup').val();
+            var LastName = $('#editModal #lastName').val();
+            var FirstName = $('#editModal #firstName').val();
+            var Email = $('#editModal #email').val();
+            var Password = $('#addModal #password').val();
+            $.ajax({
+                url: "/Users/Add",
+                method: "POST",
+                async: false,
+                data: { 'IdUser': id, 'IdGroup': idGroup, 'LastName': LastName, 'FirstName': FirstName, 'Email': Email, 'Password': Password },
+                success: function (data) {
+                    if (data["status"] == "Ok") {
+                        $('#editModal #id').val('');
+                        $('#editModal #idGroup').val('');
+                        $('#editModal #lastName').val('');
+                        $('#editModal #firstName').val('');
+                        $('#editModal #email').val('');
+                        $('#editModal #password').val('Password');
+                        $('#addModal').modal('hide');
+                        location.reload();
+                    }
+                    else {
+                        showAuthAlert(data["message"], 3000, '#AddModalAlerts');
+                    }
+                }
+            })
+
+        });
+    })
+    function btnEditClick(id, model) {
+        model = JSON.parse(model);
+
+        $('#editModal #id').val(id).attr('readonly', true);
+        $('#editModal #idGroup').val(model["IdGroup"]);
+        $('#editModal #lastName').val(model["LastName"]);
+        $('#editModal #firstName').val(model["FirstName"]);
+        $('#editModal #email').val(model["Email"]);
+        $('#editModal #password').val('Password').attr('readonly', true);
+
+        $('#editModal').modal('show');
+
+        $('#EditModalSave').click(function (e) {
+            e.preventDefault();
+            var id = $('#editModal #id').val();
+            var idGroup = $('#editModal #idGroup').val();
+            var LastName = $('#editModal #lastName').val();
+            var FirstName = $('#editModal #firstName').val();
+            var Email = $('#editModal #email').val();
+            $.ajax({
+                url: "/Users/Edit",
+                method: "POST",
+                async: false,
+                data: { 'IdUser': id, 'IdGroup': idGroup, 'LastName': LastName, 'FirstName': FirstName, 'Email': Email, 'Password': null },
+                success: function (data) {
+                    if (data["status"] == "Ok") {
+                        $('#editModal #id').val('');
+                        $('#editModal #idGroup').val('');
+                        $('#editModal #lastName').val('');
+                        $('#editModal #firstName').val('');
+                        $('#editModal #email').val('');
+                        $('#editModal #password').val('Password');
+                        $('#editModal').modal('hide');
+                        location.reload();
+                    }
+                }
+            })
+
+        });
+    }
+    function btnInfoClick(id, group, last, first, email) {
+        $('#infoModal #id').val(id);
+        $('#infoModal #groupUser').val(group);
+        $('#infoModal #lastName').val(last);
+        $('#infoModal #firstName').val(first);
+        $('#infoModal #email').val(email);
+
+        $('#infoModal').modal('show');
+    }
+    function btnDelClick(id) {
+        $('#DelId').val(id);
+        $('#deleteModal').modal('show');
+
+        $('#DeleteModalSave').click(function (e) {
+            e.preventDefault();
+            var id = $('#DelId').val();
+            $.ajax({
+                url: "/Users/Delete",
+                method: "POST",
+                async: false,
+                data: { 'id': id },
+                success: function (data) {
+                    if (data["status"] == "Ok") {
+                        $('#DelId').val('');
+                        $('#deleteModal').modal('hide');
+                        location.reload();
+                    }
+                }
+            })
+
+        });
+    }
+    function showAuthAlert(text, time, target) {
+        $(target).html('<div id=\"myAlert\" class=\"alert alert-danger alert-dismissible fade\" role=\"alert\">' + text + '</div>');
+        setTimeout(function () {
+            $('#myAlert').addClass('show');
+        }, 100);
+        setTimeout(function () {
+            $('#myAlert').removeClass('show')
+            setTimeout(function () {
+                $('#myAlert').remove();
+            }, 150);
+
+        }, time + 250);
+    }
+</script>
+<div class="border border-primary">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col" style="width: 1%;">#</th>
+                <th scope="col">Last name</th>
+                <th scope="col">First name</th>
+                <th scope="col">E-mail</th>
+                <th scope="col" style="width: 1%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@(((Users)item).LastName)</td>
+                    <td>@(((Users)item).FirstName)</td>
+                    <td>@(((Users)item).Email)</td>
+                    <td>
+                        <div style="display: flex">
+                            @{
+                                item.PasswordHash = "";
+                                string json = JsonConvert.SerializeObject((Users)item, Formatting.None,
+                                    new JsonSerializerSettings()
+                                    {
+                                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                    });
+                            }
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                    onclick="btnInfoClick('@item.Id', '@(((Users)item).IdGroupNavigation.Name)', '@(((Users)item).LastName)', '@(((Users)item).FirstName)', '@(((Users)item).Email)')"
+                                    style="margin-right: 5px;">
+                                &#128065;
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" onclick="btnEditClick('@item.Id', '@json')">✎</button>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" onclick="btnDelClick('@item.Id')" style="margin-left: 15px;">&#10006;</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<partial name="_TableBottom" />
+
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Подробные сведения</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Код:</label>
+                    <input type="text" class="form-control" id="id" readonly>
+                </div>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Name</span>
+                    </div>
+                    <input type="text" aria-label="First name" class="form-control" id="lastName" readonly>
+                    <input type="text" aria-label="Last name" class="form-control" id="firstName" readonly>
+                </div>
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Group</span>
+                    </div>
+                    <input type="text" class="form-control" id="groupUser" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">E-mail:</label>
+                    <input type="text" class="form-control" id="email" readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    ViewData["FormModal"] = @"<div class=""form-group"">
+                    <label for=""recipient-name"" class=""col-form-label"">Код:</label>
+                    <input type=""text"" readonly=""true"" class=""form-control"" id=""id"">
+                </div>
+                <div class=""input-group form-group"">
+                    <div class=""input-group-prepend"">
+                        <span class=""input-group-text"">Name*</span>
+                    </div>
+                    <input type=""text"" aria-label=""First name"" class=""form-control"" id=""lastName"">
+                    <input type=""text"" aria-label=""Last name"" class=""form-control"" id=""firstName"">
+                </div>
+                <div class=""input-group mb-3"">
+                <div class=""input-group-prepend"">
+                    <label class=""input-group-text"" for=""inputGroupSelect01"">Group*</label>
+                </div>
+                <select class=""custom-select"" id=""idGroup"">
+                    <option selected>Выберете...</option>";
+    foreach (var i in (Groups[])ViewData["Groups"])
+    {
+        ViewData["FormModal"] += $@"<option value=""{i.IdGroup}"">{i.Name}</option>";
+    }
+    ViewData["FormModal"] += @"</select>
+            </div>
+                <div class=""form-group"">
+                    <label for=""recipient-name"" class=""col-form-label"">E-mail*</label>
+                    <input type = ""text"" class=""form-control"" id=""email"">
+                </div>
+                <div class=""form-group"">
+                    <label for=""recipient-name"" class=""col-form-label"">Password*</label>
+                    <div class=""input-group mb-3"">
+                        <input type=""password"" class=""form-control"" placeholder=""Password"" aria-label=""password"" aria-describedby=""button-addon2"" id=""password"">
+                            <div class=""input-group-append"">
+                            <!--<button class=""btn btn-outline-secondary"" type=""button"" id=""genpassword"">Generate</button>-->
+                        </div>
+                    </div>
+                </div>
+";
+}
+<partial name="_TableModal" />
