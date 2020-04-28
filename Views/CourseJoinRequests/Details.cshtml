@@ -1,0 +1,50 @@
+﻿@model GIP2LearnPlatform.Models.CourseJoinRequest
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CourseJoinRequest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovedByStudent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovedByStudent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovedByTeacher)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovedByTeacher)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Course)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

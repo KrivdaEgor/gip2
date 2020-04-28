@@ -1,0 +1,41 @@
+﻿@model IEnumerable<GIP2LearnPlatform.Models.MyUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Admin panel</h2>
+
+This admin panel allows you to manage users and their permissions
+<br />
+<p>
+    @if (User.IsInRole("admin"))
+    {
+        @Html.ActionLink("Add user manually", "Create")
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var b in ViewBag.Users)
+    {
+        <tr>
+            <td>
+                @b.Email
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    }
+
+
+</table>

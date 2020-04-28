@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,21 +45,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -102,6 +103,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -169,17 +171,21 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ClassroomsController.cs" />
+    <Compile Include="Controllers\CourseJoinRequestsController.cs" />
     <Compile Include="Controllers\CourseRequestsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LessonsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MyUsersController.cs" />
     <Compile Include="Controllers\PlanningsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CourseJoinRequest.cs" />
     <Compile Include="Models\CourseRequest.cs" />
+    <Compile Include="Models\MyUser.cs" />
     <Compile Include="Models\Planning.cs" />
     <Compile Include="Models\Lesson.cs" />
     <Compile Include="Models\Course.cs" />
@@ -271,6 +277,18 @@
     <Content Include="Views\CourseRequests\Details.cshtml" />
     <Content Include="Views\CourseRequests\Edit.cshtml" />
     <Content Include="Views\CourseRequests\Index.cshtml" />
+    <Content Include="Views\Courses\Join.cshtml" />
+    <Content Include="Views\Courses\Leave.cshtml" />
+    <Content Include="Views\MyUsers\Create.cshtml" />
+    <Content Include="Views\MyUsers\Delete.cshtml" />
+    <Content Include="Views\MyUsers\Details.cshtml" />
+    <Content Include="Views\MyUsers\Edit.cshtml" />
+    <Content Include="Views\MyUsers\Index.cshtml" />
+    <Content Include="Views\CourseJoinRequests\Create.cshtml" />
+    <Content Include="Views\CourseJoinRequests\Delete.cshtml" />
+    <Content Include="Views\CourseJoinRequests\Details.cshtml" />
+    <Content Include="Views\CourseJoinRequests\Edit.cshtml" />
+    <Content Include="Views\CourseJoinRequests\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,5 +11,6 @@ namespace GIP2LearnPlatform.Models
         public string Code { get; set; }
         public string Name { get; set; }
         public int StudentPoints { get; set; }
+        public string Users { get; set; }
     }
 }

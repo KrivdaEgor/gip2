@@ -1,0 +1,69 @@
+﻿@model GIP2LearnPlatform.Models.CourseJoinRequest
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>CourseJoinRequest</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div style="display:none;">
+            <p>
+                @Html.Label("Approved by student", htmlAttributes: new { @class = "col-md-2" })
+
+                <select name="ApprovedByStudent">
+                    <option>Yes</option>
+                </select>
+            </p>
+        </div>
+        <div style="display:none;">
+            <p>
+                @Html.Label("Approved by teacher", htmlAttributes: new { @class = "col-md-2" })
+
+                <select name="ApprovedByTeacher">
+                    <option>Pending</option>
+                </select>
+            </p>
+        </div>
+
+        <div style="display:none;">
+            <p>
+                @Html.Label("Student", htmlAttributes: new { @class = "col-md-2" })
+
+                <select name="User">
+                    <option>@User.Identity.Name</option>
+                </select>
+            </p>
+        </div>
+
+        <p>
+            @Html.Label("Course", htmlAttributes: new { @class = "col-md-2" })
+
+            <select name="Course">
+                @foreach (var b in ViewBag.Courses)
+                {
+                    <option>@b.Name</option>
+                }
+            </select>
+        </p>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

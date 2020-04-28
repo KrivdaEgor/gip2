@@ -7,140 +7,125 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GIP2LearnPlatform.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace GIP2LearnPlatform.Controllers
 {
-    public class CoursesController : Controller
+    public class MyUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Courses
+        // GET: MyUsers
         public ActionResult Index()
         {
-            return View(db.Courses.ToList());
+            ViewBag.Users = db.Users;
+            return View(db.MyUsers.ToList());
         }
 
-        // GET: Courses/Details/5
+        // GET: MyUsers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            MyUser myUser = db.MyUsers.Find(id);
+            if (myUser == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(myUser);
         }
 
-        // GET: Courses/Create
+        // GET: MyUsers/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: MyUsers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Code,Name,StudentPoints")] Course course)
+        public ActionResult Create([Bind(Include = "Id,Email,Password,Role")] MyUser myUser)
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
+                db.MyUsers.Add(myUser);
+
+                var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+
+                var u = new ApplicationUser { Email = myUser.Email, UserName = myUser.Email };
+                string password = myUser.Password;
+                var result = userManager.Create(u, password);
+                if (result.Succeeded)
+                {
+                    if (myUser.Role == "teacher" || myUser.Role == "admin")
+                        userManager.AddToRole(u.Id, myUser.Role);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(course);
+            return View(myUser);
         }
 
-        // GET: Courses/Edit/5
+        // GET: MyUsers/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            MyUser myUser = db.MyUsers.Find(id);
+            if (myUser == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(myUser);
         }
 
-        // POST: Courses/Edit/5
+        // POST: MyUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Code,Name,StudentPoints")] Course course)
+        public ActionResult Edit([Bind(Include = "Id,Email,Password,Role")] MyUser myUser)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
+                db.Entry(myUser).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(course);
+            return View(myUser);
         }
 
-        // GET: Courses/Delete/5
+        // GET: MyUsers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
+            MyUser myUser = db.MyUsers.Find(id);
+            if (myUser == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
+            return View(myUser);
         }
 
-        // POST: Courses/Delete/5
+        // POST: MyUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        //
-
-        public ActionResult Join(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Course course = db.Courses.Find(id);
-            if (course == null)
-            {
-                return HttpNotFound();
-            }
-            return View(course);
-        }
-
-        // POST: Courses/Join/5
-        [HttpPost, ActionName("Join")]
-        [ValidateAntiForgeryToken]
-        public ActionResult JoinConfirmed(int id)
-        {
-            Course course = db.Courses.Find(id);
-            db.Courses.Attach(course);
-            course.Users = User.Identity.Name;
-
-            //db.Courses.Remove(course);
+            MyUser myUser = db.MyUsers.Find(id);
+            db.MyUsers.Remove(myUser);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

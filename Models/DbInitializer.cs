@@ -15,21 +15,38 @@ namespace GIP2LearnPlatform.Models
             var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
 
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
-            var role1 = new IdentityRole { Name = "admin" };
-            var role2 = new IdentityRole { Name = "user" };
-            var role3 = new IdentityRole { Name = "teacher" };
-            roleManager.Create(role1);
-            roleManager.Create(role2);
-            roleManager.Create(role3);
+            var adminRole = new IdentityRole { Name = "admin" };
+            var teacherRole = new IdentityRole { Name = "teacher" };
+            roleManager.Create(adminRole);
+            roleManager.Create(teacherRole);
 
-            var admin = new ApplicationUser { Email = "somemail@mail.ru", UserName = "somemail@mail.ru" };
-            string password = "ad46D_ewr3";
-            var result = userManager.Create(admin, password);
-
-            if (result.Succeeded)
             {
-                userManager.AddToRole(admin.Id, role1.Name);
-                userManager.AddToRole(admin.Id, role2.Name);
+                var u = new ApplicationUser { Email = "admin@test.com", UserName = "admin@test.com" };
+                string password = "123456";
+                var result = userManager.Create(u, password);
+                if (result.Succeeded)
+                {
+                    userManager.AddToRole(u.Id, adminRole.Name);
+                }
+            }
+            {
+                var u = new ApplicationUser { Email = "teacher@test.com", UserName = "teacher@test.com" };
+                string password = "123456";
+                var result = userManager.Create(u, password);
+                if (result.Succeeded)
+                {
+                    userManager.AddToRole(u.Id, teacherRole.Name);
+                }
+            }
+            {
+                var u = new ApplicationUser { Email = "user@test.com", UserName = "user@test.com" };
+                string password = "123456";
+                var result = userManager.Create(u, password);
+            }
+            {
+                var u = new ApplicationUser { Email = "user2@test.com", UserName = "user2@test.com" };
+                string password = "123456";
+                var result = userManager.Create(u, password);
             }
 
             db.Courses.Add(new Course { Code = "GIP1", Name = "Integrated Project", StudentPoints = 4 });

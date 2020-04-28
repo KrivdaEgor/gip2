@@ -39,5 +39,9 @@ namespace GIP2LearnPlatform.Models
         public System.Data.Entity.DbSet<GIP2LearnPlatform.Models.Planning> Plannings { get; set; }
 
         public System.Data.Entity.DbSet<GIP2LearnPlatform.Models.CourseRequest> CourseRequests { get; set; }
+
+        public System.Data.Entity.DbSet<GIP2LearnPlatform.Models.MyUser> MyUsers { get; set; }
+
+        public System.Data.Entity.DbSet<GIP2LearnPlatform.Models.CourseJoinRequest> CourseJoinRequests { get; set; }
     }
 }

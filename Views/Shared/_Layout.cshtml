@@ -26,6 +26,18 @@
                     <li>@Html.ActionLink("Course", "Index", "Courses")</li>
                     <li>@Html.ActionLink("Lesson", "Index", "Lessons")</li>
                     <li>@Html.ActionLink("Planning", "Index", "Plannings")</li>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li>@Html.ActionLink("Admin Panel", "Index", "MyUsers")</li>
+                    }
+                    @if (User.IsInRole("teacher"))
+                    {
+                        <li>@Html.ActionLink("Course Requests", "Index", "CourseJoinRequests")</li>
+                    }
+                    @if (!User.IsInRole("teacher") && !User.IsInRole("admin") && User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("My Courses", "Index", "CourseJoinRequests")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
